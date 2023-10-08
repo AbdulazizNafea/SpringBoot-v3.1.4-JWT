@@ -52,5 +52,6 @@ public class MyUserController {
     @GetMapping("/getUser")
     public ResponseEntity getUserById(@AuthenticationPrincipal MyUser user){
         return ResponseEntity.status(HttpStatus.OK).body(myUserService.getUserById(user.getId()));
+
     }
 }
