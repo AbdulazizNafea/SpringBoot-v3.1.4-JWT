@@ -25,8 +25,8 @@ public class MyUserController {
 
     @GetMapping("/get")
     public ResponseEntity getUser() {
-        List<MyUser> userList = myUserService.getUsers();
-        return ResponseEntity.status(200).body(userList);
+       // List<MyUser> userList = myUserService.getUsers();
+        return ResponseEntity.status(200).body(myUserService.getUsers());
     }
 
     @PostMapping("/add")

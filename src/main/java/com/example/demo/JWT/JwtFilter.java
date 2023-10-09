@@ -1,5 +1,6 @@
 package com.example.demo.JWT;
 
+import com.example.demo.repository.TokenRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,6 +24,7 @@ public class JwtFilter extends OncePerRequestFilter{
 
     private final JwtUtil jwtService;
     private final UserDetailsService userDetailsService;
+    private final TokenRepository tokenRepository;
 
     @Override
     protected void doFilterInternal(
@@ -32,7 +34,6 @@ public class JwtFilter extends OncePerRequestFilter{
     ) throws ServletException, IOException {
         if (request.getServletPath().contains("/api/v1/auth")) {
             filterChain.doFilter(request, response);
-
             return;
         }
         final String authHeader = request.getHeader("Authorization");
@@ -46,10 +47,10 @@ public class JwtFilter extends OncePerRequestFilter{
         userEmail = jwtService.extractUsername(jwt);
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
-//            var isTokenValid = tokenRepository.findByToken(jwt)
-//                    .map(t -> !t.isExpired() && !t.isRevoked())
-//                    .orElse(false);
-            if (jwtService.isTokenValid(jwt, userDetails)) {
+            var isTokenValid = tokenRepository.findByToken(jwt)
+                    .map(t -> !t.isExpired() && !t.isRevoked())
+                    .orElse(false);
+            if (jwtService.isTokenValid(jwt, userDetails) && isTokenValid) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,
@@ -64,4 +65,3 @@ public class JwtFilter extends OncePerRequestFilter{
         filterChain.doFilter(request, response);
     }
 }
-
