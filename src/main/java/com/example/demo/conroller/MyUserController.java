@@ -44,11 +44,6 @@ public class MyUserController {
         return ResponseEntity.status(HttpStatus.OK).body("Welcome back");
     }
 
-    @PostMapping("/logout")
-    public ResponseEntity logout(){
-        return ResponseEntity.status(HttpStatus.OK).body("logout!");
-    }
-
     @GetMapping("/getUser")
     public ResponseEntity getUserById(@AuthenticationPrincipal MyUser user){
         return ResponseEntity.status(HttpStatus.OK).body(myUserService.getUserById(user.getId()));
