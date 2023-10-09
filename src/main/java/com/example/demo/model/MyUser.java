@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @Data
 @Entity
@@ -19,6 +20,9 @@ import java.util.Collections;
 @RequiredArgsConstructor
 @Builder
 public class MyUser implements UserDetails {
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "myUser")
+    private List<TokenModel> tokens;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
